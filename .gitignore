@@ -1,0 +1,26 @@
+## Compiled JavaScript files
+**/*.js
+!**/*.test.js
+!*.config.js
+**/*.js.map
+
+# Typescript v1 declaration files
+typings/
+
+node_modules/
+
+.DS_Store
+.runtimeconfig.json
+
+report.*
+
+google-cloud.json
+
+dist/*
+
+.jest-cache
+
+cache/
+.env*
+
+!.prettierrc.js

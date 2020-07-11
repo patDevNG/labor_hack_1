@@ -1,0 +1,80 @@
+{
+    "parser": "@typescript-eslint/parser", // Specifies the ESLint parser
+    "extends": [
+        "plugin:@typescript-eslint/recommended", // Uses the recommended rules from the @typescript-eslint/eslint-plugin
+        "prettier/@typescript-eslint", // Uses eslint-config-prettier to disable ESLint rules from @typescript-eslint/eslint-plugin that would conflict with prettier
+        "plugin:prettier/recommended" // Enables eslint-plugin-prettier and displays prettier errors as ESLint errors. Make sure this is always the last configuration in the extends array.
+	],
+    "parserOptions": {
+		"project": "./tsconfig.eslint.json",
+        "ecmaVersion": 2018, // Allows for the parsing of modern ECMAScript features
+        "sourceType": "module" // Allows for the use of imports
+    },
+    "rules": {
+        // Place to specify ESLint rules. Can be used to overwrite rules specified from the extended configs
+        "prettier/prettier": "warn",
+		"@typescript-eslint/camelcase": "off",
+		"@typescript-eslint/explicit-module-boundary-types": "off",
+		"@typescript-eslint/explicit-function-return-type": ["off", { "allowExpressions": true }],
+		// Force function overloads to be declared together. This ensures readers understand APIs.
+		"@typescript-eslint/adjacent-overload-signatures": "error",
+
+		// Warn when an empty interface is defined. These are generally not useful.
+		"@typescript-eslint/no-empty-interface": "warn",
+
+		// Do not allow internal modules or namespaces . These are deprecated in favor of ES6 modules.
+		"@typescript-eslint/no-namespace": "error",
+
+		// Do not allow type assertions that do nothing. This is a big warning that the developer may not understand the
+		// code currently being edited (they may be incorrectly handling a different type case that does not exist).
+		"@typescript-eslint/no-unnecessary-type-assertion": "error",
+
+		// prefer for( ... of ... ) to an index loop when the index is only used to fetch an object from an array.
+		// (Even better: check out utils like .map if transforming an array!)
+		"@typescript-eslint/prefer-for-of": "warn",
+
+		// Force the use of ES6-style imports instead of /// <reference path=> imports.
+		"@typescript-eslint/triple-slash-reference": "error",
+
+		// Warns if function overloads could be unified into a single function with optional or rest parameters.
+		"@typescript-eslint/unified-signatures": "warn",
+
+		// Do not allow super() to be called twice in a constructor.
+		"constructor-super": "error",
+
+		// Disallows the (often typo) syntax if (var1 = var2). Replace with if (var2) { var1 = var2 }.
+		"no-cond-assign": "error",
+
+		// Do not allow the same case to appear more than once in a switch block.
+		"no-duplicate-case": "error",
+
+		// Empty blocks are almost never needed. Allow the one general exception: empty catch blocks.
+		"no-empty": [
+			"error",
+			{
+				"allowEmptyCatch": true
+			}
+		],
+		"no-empty-function": "error",
+
+		// The 'this' keyword can only be used inside of classes.
+		"no-invalid-this": "error",
+
+		// Do not allow the subtle/obscure comma operator.
+		"no-sequences": "error",
+
+		// Do not allow strings to be thrown because they will not include stack traces. Throw Errors instead.
+		"no-throw-literal": "error",
+
+		// Disallow control flow statements, such as return, continue, break, and throw in finally blocks.
+		"no-unsafe-finally": "error",
+
+		// Disallow nonsensical label usage.
+		"no-unused-labels": "error",
+
+		// Warn when variables are defined with var. Var has subtle meaning that can lead to bugs. Strongly prefer const for
+		// most values and let for values that will change.
+		"no-var": "warn"
+        
+    }
+}
