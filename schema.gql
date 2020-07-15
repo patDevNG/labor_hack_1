@@ -3,14 +3,32 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
+input createUserInput {
+  email: String!
+  firstName: String!
+  lastName: String!
+  phoneNumber: String
+  role: String = "user"
+  uid: String!
+}
+
+type Mutation {
+  createNewUser(input: createUserInput!): User!
+  requestResetPassword(email: String!): User!
+}
+
 type Query {
   returnAllUser: [User!]!
-  returnSingleUser(id: String!): User!
+  returnSingleUser(id: String!): User
 }
 
 """The User model"""
 type User {
-  email: String!
+  email: String
+  firstName: String
   id: ID!
-  username: String!
+  lastName: String
+  phoneNumber: String
+  role: String!
+  uid: ID!
 }

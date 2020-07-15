@@ -2,7 +2,7 @@ import { ApolloServer } from 'apollo-server-express';
 import 'reflect-metadata';
 import { buildSchema } from 'type-graphql';
 import { connect } from 'mongoose';
-
+import dotenv from 'dotenv';
 // resolvers
 import resolvers from './graphql';
 
@@ -12,9 +12,10 @@ const graphQlServer = async (app: any) => {
 		emitSchemaFile: true,
 		validate: false,
 	});
+	dotenv.config();
 
 	// create mongoose connection
-	const mongoose = await connect('mongodb://patDev:planks123@ds037508.mlab.com:37508/linkup', {
+	const mongoose = await connect(`${process.env._MONGO_URI_LOCAL}`, {
 		useNewUrlParser: true,
 		useUnifiedTopology: true,
 		useCreateIndex: true,

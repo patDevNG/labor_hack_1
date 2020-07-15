@@ -70,7 +70,7 @@
 		"no-unsafe-finally": "error",
 
 		// Disallow nonsensical label usage.
-		"no-unused-labels": "error",
+		"no-unused-labels": "warn",
 
 		// Warn when variables are defined with var. Var has subtle meaning that can lead to bugs. Strongly prefer const for
 		// most values and let for values that will change.
