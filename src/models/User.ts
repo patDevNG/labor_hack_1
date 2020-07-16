@@ -1,5 +1,6 @@
 import { ObjectType, Field, ID } from 'type-graphql';
-import { prop as Property, getModelForClass } from '@typegoose/typegoose';
+import { prop as Property, getModelForClass, Ref } from '@typegoose/typegoose';
+import { Location } from './types';
 
 @ObjectType({ description: 'The User model' })
 export class User {
@@ -30,6 +31,10 @@ export class User {
 	@Field(() => String)
 	@Property({ required: false })
 	role = 'user';
+
+	@Field(() => Location, { nullable: true })
+	@Property({ required: false, ref: 'Location', _id: false })
+	location: Ref<Location>;
 
 	@Field(() => ID)
 	@Property({ required: true })

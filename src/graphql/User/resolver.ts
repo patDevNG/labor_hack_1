@@ -4,9 +4,8 @@ import { User, UserModel } from '../../models/User';
 import utils from '../../utils';
 
 import { createUserInput } from './input';
-
 const { firebase } = utils;
-const { firebase: fireBase, admin } = firebase;
+const { firebase: fireBase } = firebase;
 @Resolver()
 export class UserResolver {
 	@Query(() => User, { nullable: true })
@@ -21,8 +20,17 @@ export class UserResolver {
 
 	@Mutation(() => User)
 	async createNewUser(@Arg('input') input: createUserInput): Promise<User> {
-		const { firstName, lastName, email, phoneNumber, role, uid } = input;
-		await admin.auth().setCustomUserClaims(uid, { role });
+		const { firstName, lastName, email, phoneNumber, role, uid, location } = input;
+		console.log(location);
+		const locationToSave = [location];
+		// locationToSave.push(location);
+		console.log(locationToSave);
+
+		// const locationTosave = {
+		// 	state: state,
+		// 	address: address,
+		// };
+		// await admin.auth().setCustomUserClaims(uid, { role });
 		const createdUser = await UserModel.create({
 			firstName,
 			lastName,
@@ -30,7 +38,10 @@ export class UserResolver {
 			phoneNumber,
 			role,
 			uid,
+			location,
 		});
+		console.log(createdUser);
+
 		if (createdUser) {
 			return createdUser;
 		}

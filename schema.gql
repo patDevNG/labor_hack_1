@@ -7,9 +7,22 @@ input createUserInput {
   email: String!
   firstName: String!
   lastName: String!
+  location: LocationInput!
   phoneNumber: String
   role: String = "user"
   uid: String!
+}
+
+type Location {
+  address: String
+  id: ID
+  state: String
+}
+
+input LocationInput {
+  address: String
+  id: ID
+  state: String
 }
 
 type Mutation {
@@ -28,6 +41,7 @@ type User {
   firstName: String
   id: ID!
   lastName: String
+  location: Location
   phoneNumber: String
   role: String!
   uid: ID!
