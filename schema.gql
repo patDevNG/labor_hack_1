@@ -3,11 +3,21 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
+"""The Category model"""
+type Category {
+  id: ID!
+  name: String!
+}
+
+input createCategoryInput {
+  name: String!
+}
+
 input createUserInput {
   email: String!
   firstName: String!
   lastName: String!
-  location: LocationInput!
+  locations: [LocationInput!]!
   phoneNumber: String
   role: String = "user"
   uid: String!
@@ -15,17 +25,16 @@ input createUserInput {
 
 type Location {
   address: String
-  id: ID
   state: String
 }
 
 input LocationInput {
   address: String
-  id: ID
   state: String
 }
 
 type Mutation {
+  createNewCategory(input: createCategoryInput!): Category!
   createNewUser(input: createUserInput!): User!
   requestResetPassword(email: String!): User!
 }
@@ -41,7 +50,7 @@ type User {
   firstName: String
   id: ID!
   lastName: String
-  location: Location
+  locations: [Location!]
   phoneNumber: String
   role: String!
   uid: ID!

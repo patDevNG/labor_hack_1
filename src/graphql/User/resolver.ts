@@ -1,6 +1,8 @@
 import { Resolver, Arg, Query, Mutation } from 'type-graphql';
+import { ObjectId } from 'mongodb';
 // import bcrypt from 'bcryptjs';
 import { User, UserModel } from '../../models/User';
+import { LocationModel } from '../../models/Location';
 import utils from '../../utils';
 
 import { createUserInput } from './input';
@@ -20,16 +22,15 @@ export class UserResolver {
 
 	@Mutation(() => User)
 	async createNewUser(@Arg('input') input: createUserInput): Promise<User> {
-		const { firstName, lastName, email, phoneNumber, role, uid, location } = input;
-		console.log(location);
-		const locationToSave = [location];
-		// locationToSave.push(location);
-		console.log(locationToSave);
+		const { firstName, lastName, email, phoneNumber, role, uid, locations } = input;
 
-		// const locationTosave = {
-		// 	state: state,
-		// 	address: address,
-		// };
+		const locationIdsss = [] as ObjectId[];
+
+		locations.forEach(async location => {
+			const { _id } = await LocationModel.create(location);
+			locationIdsss.push(_id);
+		});
+
 		// await admin.auth().setCustomUserClaims(uid, { role });
 		const createdUser = await UserModel.create({
 			firstName,
@@ -38,12 +39,17 @@ export class UserResolver {
 			phoneNumber,
 			role,
 			uid,
-			location,
+			location: locationIdsss,
 		});
-		console.log(createdUser);
+		console.log({ createdUser });
 
 		if (createdUser) {
-			return createdUser;
+			const { _id } = createdUser;
+			const user = await UserModel.findById(_id).populate('locations');
+			if (user) {
+				return user;
+			}
+			throw new Error('User not created');
 		}
 		throw new Error('Something went wrong');
 	}

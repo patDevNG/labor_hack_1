@@ -28,6 +28,7 @@
 		"firebase-admin": "^8.13.0",
 		"graphql": "^15.3.0",
 		"mocha": "^8.0.1",
+		"mongodb": "^3.5.9",
 		"mongoose": "^5.9.23",
 		"reflect-metadata": "^0.1.13",
 		"supertest": "^4.0.2",
