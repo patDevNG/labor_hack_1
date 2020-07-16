@@ -7,7 +7,7 @@ import utils from '../../utils';
 
 import { createUserInput } from './input';
 const { firebase } = utils;
-const { firebase: fireBase } = firebase;
+const { firebase: fireBase, admin } = firebase;
 @Resolver()
 export class UserResolver {
 	@Query(() => User, { nullable: true })
@@ -51,10 +51,21 @@ export class UserResolver {
 		try {
 			const user = await UserModel.findOne({ email: email.trim() });
 			if (user) {
-				await fireBase.auth().sendPasswordResetEmail(email);
+				await fireBase.auth().sendPasswordResetEmail(email.trim());
 				return 'Reset password is successful';
 			}
 			throw new Error('User does not exist');
+		} catch (error) {
+			throw new Error(error);
+		}
+	}
+
+	@Query(() => User)
+	async lastSignInTime(@Arg('email') email: string): Promise<String> {
+		try {
+			const userRecord = await admin.auth().getUserByEmail(email.trim());
+			const lastSignIn = userRecord.metadata.lastSignInTime;
+			return lastSignIn;
 		} catch (error) {
 			throw new Error(error);
 		}

@@ -40,6 +40,7 @@ type Mutation {
 }
 
 type Query {
+  lastSignInTime(email: String!): User!
   returnAllUser: [User!]!
   returnSingleUser(id: String!): User
 }
