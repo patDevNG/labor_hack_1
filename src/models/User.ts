@@ -1,7 +1,15 @@
-import { ObjectType, Field, ID } from 'type-graphql';
-import { prop as Property, getModelForClass, Ref } from '@typegoose/typegoose';
+import { ObjectType, Field, ID, registerEnumType } from 'type-graphql';
+import { prop as Property, getModelForClass } from '@typegoose/typegoose';
 import { Location } from './Location';
 
+export enum Role {
+	CLIENT = 'CLIENT',
+	TRADESMAN = 'TRADESMAN',
+	ADMIN = 'ADMIN',
+}
+registerEnumType(Role, {
+	name: 'Role',
+});
 @ObjectType({ description: 'The User model' })
 export class User {
 	@Field(() => ID)
@@ -28,13 +36,13 @@ export class User {
 	// @Property({ required: false })
 	// password: string;
 
-	@Field(() => String)
+	@Field(() => Role)
 	@Property({ required: false })
-	role = 'user';
+	role = Role.CLIENT;
 
 	@Field(() => [Location], { nullable: true })
-	@Property({ required: false, ref: Location })
-	location: Ref<Location>[];
+	@Property({ required: false, type: Location })
+	location: Location[];
 
 	@Field(() => ID)
 	@Property({ required: true })

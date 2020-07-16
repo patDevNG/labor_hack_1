@@ -1,6 +1,6 @@
 import { InputType, Field } from 'type-graphql';
 import { Length, IsEmail, IsPhoneNumber } from 'class-validator';
-import { User } from '../../models/User';
+import { User, Role } from '../../models/User';
 @InputType()
 export class LocationInput {
 	@Field({ nullable: true })
@@ -9,7 +9,6 @@ export class LocationInput {
 	@Field({ nullable: true })
 	address: string;
 }
-
 @InputType()
 export class createUserInput implements Partial<User> {
 	@Field()
@@ -29,13 +28,13 @@ export class createUserInput implements Partial<User> {
 	phoneNumber: string;
 
 	@Field(() => [LocationInput])
-	locations: LocationInput[];
+	location: LocationInput[];
 
 	@Field()
 	uid: string;
 
-	@Field(() => String, { nullable: true })
-	role = 'user';
+	@Field(() => Role, { nullable: true })
+	role = Role.ADMIN;
 }
 
 @InputType()

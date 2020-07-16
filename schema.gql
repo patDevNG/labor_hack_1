@@ -17,9 +17,9 @@ input createUserInput {
   email: String!
   firstName: String!
   lastName: String!
-  locations: [LocationInput!]!
+  location: [LocationInput!]!
   phoneNumber: String
-  role: String = "user"
+  role: Role = ADMIN
   uid: String!
 }
 
@@ -44,14 +44,20 @@ type Query {
   returnSingleUser(id: String!): User
 }
 
+enum Role {
+  ADMIN
+  CLIENT
+  TRADESMAN
+}
+
 """The User model"""
 type User {
   email: String
   firstName: String
   id: ID!
   lastName: String
-  locations: [Location!]
+  location: [Location!]
   phoneNumber: String
-  role: String!
+  role: Role!
   uid: ID!
 }

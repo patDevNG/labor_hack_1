@@ -14,10 +14,15 @@ export class CategoryResolver {
 				throw new Error('Category already exist');
 			}
 			const createdCategory = await CategoryModel.create({ name });
-			console.log(createdCategory);
 
 			if (createdCategory) {
-				return createdCategory;
+				const { _id } = createdCategory;
+				const category = await CategoryModel.findById(_id);
+				if (category) {
+					category.id = _id;
+					return category;
+				}
+				throw Error('Something went wrong');
 			}
 			throw new Error('something went wrong');
 		} catch (error) {

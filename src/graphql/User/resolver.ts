@@ -1,8 +1,8 @@
 import { Resolver, Arg, Query, Mutation } from 'type-graphql';
-import { ObjectId } from 'mongodb';
+// import { ObjectId } from 'mongodb';
 // import bcrypt from 'bcryptjs';
-import { User, UserModel } from '../../models/User';
-import { LocationModel } from '../../models/Location';
+import { User, UserModel, Role } from '../../models/User';
+// import { LocationModel } from '../../models/Location';
 import utils from '../../utils';
 
 import { createUserInput } from './input';
@@ -22,35 +22,27 @@ export class UserResolver {
 
 	@Mutation(() => User)
 	async createNewUser(@Arg('input') input: createUserInput): Promise<User> {
-		const { firstName, lastName, email, phoneNumber, role, uid, locations } = input;
-
-		const locationIdsss = [] as ObjectId[];
-
-		locations.forEach(async location => {
-			const { _id } = await LocationModel.create(location);
-			locationIdsss.push(_id);
-		});
-
 		// await admin.auth().setCustomUserClaims(uid, { role });
+		const { role } = input;
 		const createdUser = await UserModel.create({
-			firstName,
-			lastName,
-			email,
-			phoneNumber,
-			role,
-			uid,
-			location: locationIdsss,
+			...input,
 		});
-		console.log({ createdUser });
 
 		if (createdUser) {
 			const { _id } = createdUser;
-			const user = await UserModel.findById(_id).populate('locations');
+			if (role === Role.TRADESMAN) {
+				// add to tradesman coollection
+				//remember to passing userId as _id
+			}
+			const user = await UserModel.findById(_id);
+
 			if (user) {
+				user.id = _id;
 				return user;
 			}
 			throw new Error('User not created');
 		}
+
 		throw new Error('Something went wrong');
 	}
 
