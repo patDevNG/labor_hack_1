@@ -7,10 +7,12 @@
 type Category {
   id: ID!
   name: String!
+  subcategory: [SubCategory!]
 }
 
 input createCategoryInput {
   name: String!
+  subcategory: [SubCategoryInput!]!
 }
 
 input createUserInput {
@@ -19,7 +21,7 @@ input createUserInput {
   lastName: String!
   location: [LocationInput!]!
   phoneNumber: String
-  role: Role = ADMIN
+  role: Role = CLIENT
   uid: String!
 }
 
@@ -49,6 +51,19 @@ enum Role {
   ADMIN
   CLIENT
   TRADESMAN
+}
+
+"""The SubCategory model"""
+type SubCategory {
+  description: String
+  estimatedCost: Float
+  heading: String
+}
+
+input SubCategoryInput {
+  description: String!
+  estimatedCost: Float!
+  heading: String!
 }
 
 """The User model"""

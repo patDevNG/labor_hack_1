@@ -1,8 +1,7 @@
 import { Resolver, Arg, Query, Mutation } from 'type-graphql';
-// import { ObjectId } from 'mongodb';
-// import bcrypt from 'bcryptjs';
+
 import { User, UserModel, Role } from '../../models/User';
-// import { LocationModel } from '../../models/Location';
+
 import utils from '../../utils';
 
 import { createUserInput } from './input';
@@ -31,7 +30,7 @@ export class UserResolver {
 		if (createdUser) {
 			const { _id } = createdUser;
 			if (role === Role.TRADESMAN) {
-				// add to tradesman coollection
+				// add to tradesman collection
 				//remember to passing userId as _id
 			}
 			const user = await UserModel.findById(_id);

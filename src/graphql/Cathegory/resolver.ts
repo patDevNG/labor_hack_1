@@ -7,13 +7,13 @@ import { createCategoryInput } from './input';
 export class CategoryResolver {
 	@Mutation(() => Category)
 	async createNewCategory(@Arg('input') input: createCategoryInput): Promise<Category> {
-		const { name } = input;
+		const { name, subcategory } = input;
 		try {
 			const availableCategory = await CategoryModel.findOne({ name: name });
 			if (availableCategory) {
 				throw new Error('Category already exist');
 			}
-			const createdCategory = await CategoryModel.create({ name });
+			const createdCategory = await CategoryModel.create({ name, subcategory });
 
 			if (createdCategory) {
 				const { _id } = createdCategory;

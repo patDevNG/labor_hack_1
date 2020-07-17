@@ -34,7 +34,7 @@ export class createUserInput implements Partial<User> {
 	uid: string;
 
 	@Field(() => Role, { nullable: true })
-	role = Role.ADMIN;
+	role = Role.CLIENT;
 }
 
 @InputType()
