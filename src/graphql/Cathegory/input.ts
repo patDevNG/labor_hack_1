@@ -1,6 +1,7 @@
-import { Field, InputType } from 'type-graphql';
+import { Field, InputType, ID } from 'type-graphql';
 import { Length } from 'class-validator';
 import { Category } from '../../models/Category';
+import { ObjectID } from 'mongodb';
 // import { Double } from 'mongodb';
 
 @InputType()
@@ -23,4 +24,13 @@ export class createCategoryInput implements Partial<Category> {
 
 	@Field(() => [SubCategoryInput])
 	subcategory: SubCategoryInput[];
+}
+
+@InputType()
+export class addSubCategoryInput {
+	@Field(() => ID)
+	id: ObjectID;
+
+	@Field(() => SubCategoryInput)
+	subcategory: SubCategoryInput;
 }

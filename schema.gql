@@ -3,6 +3,11 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
+input addSubCategoryInput {
+  id: ID!
+  subcategory: SubCategoryInput!
+}
+
 """The Category model"""
 type Category {
   id: ID!
@@ -36,6 +41,7 @@ input LocationInput {
 }
 
 type Mutation {
+  addSubCategory(input: addSubCategoryInput!): Category!
   createNewCategory(input: createCategoryInput!): Category!
   createNewUser(input: createUserInput!): User!
   requestResetPassword(email: String!): User!

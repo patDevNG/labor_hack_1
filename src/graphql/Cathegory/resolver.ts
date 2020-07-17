@@ -1,7 +1,7 @@
 import { Resolver, Arg, Mutation } from 'type-graphql';
 
 import { Category, CategoryModel } from '../../models/Category';
-import { createCategoryInput } from './input';
+import { createCategoryInput, addSubCategoryInput } from './input';
 
 @Resolver()
 export class CategoryResolver {
@@ -25,6 +25,23 @@ export class CategoryResolver {
 				throw Error('Something went wrong');
 			}
 			throw new Error('something went wrong');
+		} catch (error) {
+			throw new Error(error);
+		}
+	}
+
+	@Mutation(() => Category)
+	async addSubCategory(@Arg('input') input: addSubCategoryInput): Promise<Category> {
+		const { id, subcategory } = input;
+		try {
+			const categoryToUpdate = await CategoryModel.findById(id);
+			if (categoryToUpdate) {
+				const subCategoryToUpdate = categoryToUpdate.subcategory;
+				subCategoryToUpdate.push(subcategory);
+				await categoryToUpdate.save();
+				return categoryToUpdate;
+			}
+			throw new Error('Could not update subcategory');
 		} catch (error) {
 			throw new Error(error);
 		}
