@@ -12,12 +12,11 @@ input addSubCategoryInput {
 type Category {
   id: ID!
   name: String!
-  subcategory: [SubCategory!]
 }
 
 input createCategoryInput {
   name: String!
-  subcategory: [SubCategoryInput!]!
+  subcategory: [SubCategoryInput!]
 }
 
 input createUserInput {
@@ -41,13 +40,15 @@ input LocationInput {
 }
 
 type Mutation {
-  addSubCategory(input: addSubCategoryInput!): Category!
+  addSubCategory(input: addSubCategoryInput!): SubCategory!
   createNewCategory(input: createCategoryInput!): Category!
   createNewUser(input: createUserInput!): User!
   requestResetPassword(email: String!): User!
 }
 
 type Query {
+  getAllCategory: [Category!]!
+  getCategory(id: String!): Category!
   lastSignInTime(email: String!): User!
   returnAllUser: [User!]!
   returnSingleUser(id: String!): User
@@ -61,9 +62,11 @@ enum Role {
 
 """The SubCategory model"""
 type SubCategory {
+  category: Category!
   description: String
   estimatedCost: Float
   heading: String
+  id: ID!
 }
 
 input SubCategoryInput {

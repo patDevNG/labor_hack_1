@@ -22,7 +22,7 @@ export class createCategoryInput implements Partial<Category> {
 	@Length(3, 30)
 	name: string;
 
-	@Field(() => [SubCategoryInput])
+	@Field(() => [SubCategoryInput], { nullable: true })
 	subcategory: SubCategoryInput[];
 }
 
