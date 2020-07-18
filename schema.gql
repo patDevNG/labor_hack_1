@@ -48,8 +48,9 @@ type Mutation {
 
 type Query {
   getAllCategory: [Category!]!
-  getAspecificSubCategory(id: String!): SubCategory!
+  getAspecificSubCategoryWithCategory(id: String!): SubCategory!
   getCategory(id: String!): Category!
+  getSpecificSubCategory(id: String!): SubCategory!
   getSubCategory: [SubCategory!]!
   lastSignInTime(email: String!): User!
   returnAllUser: [User!]!

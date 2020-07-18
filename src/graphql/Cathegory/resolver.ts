@@ -60,7 +60,8 @@ export class CategoryResolver {
 
 	@Query(() => [Category])
 	async getAllCategory() {
-		return await CategoryModel.find();
+		const categories = await CategoryModel.find();
+		return categories.map(catgeory => ({ id: catgeory._id, name: catgeory.name }));
 	}
 
 	@Query(() => [SubCategory])
@@ -69,7 +70,23 @@ export class CategoryResolver {
 	}
 
 	@Query(() => SubCategory)
-	async getAspecificSubCategory(@Arg('id') id: string) {
-		return await SubCategoryModel.findById(id).populate('category');
+	async getAspecificSubCategoryWithCategory(@Arg('id') id: string): Promise<SubCategory> {
+		const specificSubCategory = await SubCategoryModel.findById(id).populate('category');
+		if (specificSubCategory) {
+			let { _id } = specificSubCategory;
+			specificSubCategory.id = _id;
+			return specificSubCategory;
+		}
+		throw new Error('Something went wrong');
+	}
+	@Query(() => SubCategory)
+	async getSpecificSubCategory(@Arg('id') id: string): Promise<SubCategory> {
+		const subCategory = await SubCategoryModel.findById(id);
+		if (subCategory) {
+			let { _id } = subCategory;
+			subCategory.id = _id;
+			return subCategory;
+		}
+		throw new Error('Something went wrong');
 	}
 }
