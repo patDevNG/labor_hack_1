@@ -62,4 +62,14 @@ export class CategoryResolver {
 	async getAllCategory() {
 		return await CategoryModel.find();
 	}
+
+	@Query(() => [SubCategory])
+	async getSubCategory() {
+		return await SubCategoryModel.find().populate('category');
+	}
+
+	@Query(() => SubCategory)
+	async getAspecificSubCategory(@Arg('id') id: string) {
+		return await SubCategoryModel.findById(id).populate('category');
+	}
 }

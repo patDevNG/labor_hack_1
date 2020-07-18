@@ -11,7 +11,7 @@ input addSubCategoryInput {
 """The Category model"""
 type Category {
   id: ID!
-  name: String!
+  name: String
 }
 
 input createCategoryInput {
@@ -48,7 +48,9 @@ type Mutation {
 
 type Query {
   getAllCategory: [Category!]!
+  getAspecificSubCategory(id: String!): SubCategory!
   getCategory(id: String!): Category!
+  getSubCategory: [SubCategory!]!
   lastSignInTime(email: String!): User!
   returnAllUser: [User!]!
   returnSingleUser(id: String!): User
@@ -62,7 +64,7 @@ enum Role {
 
 """The SubCategory model"""
 type SubCategory {
-  category: Category!
+  category: Category
   description: String
   estimatedCost: Float
   heading: String

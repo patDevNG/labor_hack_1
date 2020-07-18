@@ -2,7 +2,6 @@ import { ObjectType, Field, ID } from 'type-graphql';
 import { prop as Property, getModelForClass, Ref } from '@typegoose/typegoose';
 import { Length } from 'class-validator';
 import { Category } from './Category';
-// import { Double } from 'mongodb';
 
 @ObjectType({ description: 'The SubCategory model' })
 export class SubCategory {
@@ -23,8 +22,8 @@ export class SubCategory {
 	@Property({ required: false })
 	estimatedCost: number;
 
-	@Field(() => Category)
-	@Property({ required: true })
+	@Field(() => Category, { nullable: true })
+	@Property({ required: true, ref: Category })
 	category: Ref<Category>;
 }
 

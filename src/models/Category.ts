@@ -7,7 +7,7 @@ export class Category {
 	@Property({ required: false })
 	id: string;
 
-	@Field({ nullable: false })
+	@Field({ nullable: true })
 	@Property({ required: true, unique: true })
 	name: string;
 }
