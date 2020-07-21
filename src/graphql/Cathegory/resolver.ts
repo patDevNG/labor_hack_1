@@ -112,7 +112,7 @@ export class CategoryResolver {
 	async getSubCategory() {
 		const categories = await CategoryModel.find().populate('subCategory');
 		console.log(JSON.stringify(categories));
-		const subcategory = JSON.stringify(categories);
+		// const subcategory = JSON.stringify(categories);
 		return categories;
 	}
 }

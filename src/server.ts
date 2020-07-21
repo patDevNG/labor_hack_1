@@ -23,6 +23,8 @@ const graphQlServer = async (app: any) => {
 	});
 	await mongoose.connection;
 
+	const { ObjectId } = mongoose.Types;
+	ObjectId.prototype.valueOf = () => toString();
 	const server = new ApolloServer({
 		context: ({ req, res }) => ({ req, res }),
 		schema,
