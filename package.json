@@ -32,7 +32,8 @@
 		"mongoose": "^5.9.23",
 		"reflect-metadata": "^0.1.13",
 		"supertest": "^4.0.2",
-		"type-graphql": "^1.0.0-rc.3"
+		"type-graphql": "^1.0.0-rc.3",
+		"uuidv4": "^6.2.0"
 	},
 	"devDependencies": {
 		"@types/express": "github:types/express",

@@ -6,7 +6,7 @@ const PORT = process.env.PORT || 8484;
 // Add your subscriptions
 
 const app: Server = express();
-app.get('/test', (_: Request, res: Response) => {
+app.get('/', (_: Request, res: Response) => {
 	res.send('Success, welcome to LabourHack Backend Service ');
 });
 // const router = express.Router();

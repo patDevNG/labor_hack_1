@@ -3,20 +3,21 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
-input addSubCategoryInput {
-  id: ID!
-  subcategory: SubCategoryInput!
-}
-
 """The Category model"""
 type Category {
   id: ID!
   name: String
+  subCategory: [SubCategory!]
 }
 
 input createCategoryInput {
   name: String!
-  subcategory: [SubCategoryInput!]
+}
+
+input createTaskInput {
+  description: String!
+  estimatedCost: Float!
+  subCategory: ID!
 }
 
 input createUserInput {
@@ -40,18 +41,17 @@ input LocationInput {
 }
 
 type Mutation {
-  addSubCategory(input: addSubCategoryInput!): SubCategory!
-  createNewCategory(input: createCategoryInput!): Category!
+  createNewCategory(input: createCategoryInput!): Boolean!
   createNewUser(input: createUserInput!): User!
+  createSubCategory(input: SubCategoryInput!): Boolean!
+  createTask(input: createTaskInput!): Boolean!
   requestResetPassword(email: String!): User!
 }
 
 type Query {
   getAllCategory: [Category!]!
-  getAspecificSubCategoryWithCategory(id: String!): SubCategory!
-  getCategory(id: String!): Category!
-  getSpecificSubCategory(id: String!): SubCategory!
-  getSubCategory: [SubCategory!]!
+  getAllSubCategory: [SubCategory!]!
+  getSubCategory: [Category!]!
   lastSignInTime(email: String!): User!
   returnAllUser: [User!]!
   returnSingleUser(id: String!): User
@@ -65,17 +65,23 @@ enum Role {
 
 """The SubCategory model"""
 type SubCategory {
-  category: Category
-  description: String
-  estimatedCost: Float
-  heading: String
-  id: ID!
+  id: ID
+  index: String
+  name: String!
+  task: [Task!]
 }
 
 input SubCategoryInput {
-  description: String!
-  estimatedCost: Float!
-  heading: String!
+  category: ID!
+  name: String!
+}
+
+"""The Task Model"""
+type Task {
+  description: String
+  estimatedCost: Float
+  id: ID
+  index: String
 }
 
 """The User model"""

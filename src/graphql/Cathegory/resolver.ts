@@ -1,13 +1,15 @@
 import { Resolver, Arg, Mutation, Query } from 'type-graphql';
 
-import { Category, CategoryModel } from '../../models/Category';
-import { createCategoryInput, addSubCategoryInput } from './input';
-import { SubCategory, SubCategoryModel } from '../../models/SubCategory';
+import { CategoryModel, Category } from '../../models/Category';
+import { createCategoryInput, SubCategoryInput, createTaskInput } from './input';
+import { SubCategoryModel, SubCategory } from '../../models/SubCategory';
+import { TaskModel } from '../../models/Task';
+import { uuid } from 'uuidv4';
 
 @Resolver()
 export class CategoryResolver {
-	@Mutation(() => Category)
-	async createNewCategory(@Arg('input') input: createCategoryInput): Promise<Category> {
+	@Mutation(() => Boolean)
+	async createNewCategory(@Arg('input') input: createCategoryInput): Promise<Boolean> {
 		const { name } = input;
 		try {
 			const availableCategory = await CategoryModel.findOne({ name: name });
@@ -17,13 +19,7 @@ export class CategoryResolver {
 			const createdCategory = await CategoryModel.create({ name });
 
 			if (createdCategory) {
-				const { _id } = createdCategory;
-				const category = await CategoryModel.findById(_id);
-				if (category) {
-					category.id = _id;
-					return category;
-				}
-				throw Error('Something went wrong');
+				return true;
 			}
 			throw new Error('something went wrong');
 		} catch (error) {
@@ -31,62 +27,92 @@ export class CategoryResolver {
 		}
 	}
 
-	@Mutation(() => SubCategory)
-	async addSubCategory(@Arg('input') input: addSubCategoryInput): Promise<SubCategory> {
-		const { id, subcategory } = input;
+	@Mutation(() => Boolean)
+	async createSubCategory(@Arg('input') input: SubCategoryInput): Promise<Boolean> {
+		const { category, name } = input;
 		try {
+			// const availableSubCategory = await SubCategoryModel.findOne({ name: name });
+			// if (availableSubCategory) {
+			// 	throw new Error('Subcategory already exist');
+			// }
+			const sub_id = uuid();
+			console.log(sub_id);
+
 			const createdSubCategory = await SubCategoryModel.create({
-				...subcategory,
-				category: id,
+				name,
+				index: sub_id,
 			});
-			console.log(createdSubCategory);
 			if (createdSubCategory) {
-				const { _id } = createdSubCategory;
-				const subCategory = await SubCategoryModel.findById(_id);
-				if (subCategory) {
-					subCategory.id = _id;
-					return subCategory;
+				const { _id, index } = createdSubCategory;
+				console.log(index);
+
+				const updatedCategory = await CategoryModel.findByIdAndUpdate(
+					category,
+					{
+						$push: { subCategory: _id },
+					},
+					{ new: true, upsert: true }
+				);
+				if (updatedCategory) {
+					return true;
 				}
 			}
-			throw new Error('Could not create subcategory');
+			throw new Error('Could not create a new subcategory');
 		} catch (error) {
 			throw new Error(error);
 		}
 	}
-	@Query(() => Category)
-	async getCategory(@Arg('id') id: string) {
-		return await CategoryModel.findById(id);
+
+	@Mutation(() => Boolean)
+	async createTask(@Arg('input') input: createTaskInput): Promise<Boolean> {
+		const { description, estimatedCost, subCategory } = input;
+		const sub_id = uuid();
+		try {
+			const createdTask = await TaskModel.create({
+				description,
+				estimatedCost,
+				index: sub_id,
+			});
+			if (createdTask) {
+				const { _id } = createdTask;
+				const updatedSubCategory = await SubCategoryModel.findByIdAndUpdate(
+					subCategory,
+					{
+						$push: { task: _id },
+					},
+					{ new: true, upsert: true }
+				);
+				if (updatedSubCategory) {
+					return true;
+				}
+			}
+			throw new Error('Could not create task try again');
+		} catch (error) {
+			throw new Error(error);
+		}
 	}
 
 	@Query(() => [Category])
 	async getAllCategory() {
 		const categories = await CategoryModel.find();
-		return categories.map(catgeory => ({ id: catgeory._id, name: catgeory.name }));
+		return categories.map(catgeory => ({
+			// ...catgeory,
+			name: catgeory.name,
+			id: catgeory._id,
+		}));
 	}
 
 	@Query(() => [SubCategory])
-	async getSubCategory() {
-		return await SubCategoryModel.find().populate('category');
+	async getAllSubCategory() {
+		const subcategories = await SubCategoryModel.find().populate('task');
+		return subcategories;
 	}
 
-	@Query(() => SubCategory)
-	async getAspecificSubCategoryWithCategory(@Arg('id') id: string): Promise<SubCategory> {
-		const specificSubCategory = await SubCategoryModel.findById(id).populate('category');
-		if (specificSubCategory) {
-			let { _id } = specificSubCategory;
-			specificSubCategory.id = _id;
-			return specificSubCategory;
-		}
-		throw new Error('Something went wrong');
-	}
-	@Query(() => SubCategory)
-	async getSpecificSubCategory(@Arg('id') id: string): Promise<SubCategory> {
-		const subCategory = await SubCategoryModel.findById(id);
-		if (subCategory) {
-			let { _id } = subCategory;
-			subCategory.id = _id;
-			return subCategory;
-		}
-		throw new Error('Something went wrong');
+	@Query(() => [Category])
+	async getSubCategory() {
+		const categories = await CategoryModel.find().populate('subCategory');
+		console.log(JSON.stringify(categories));
+		const subcategory = JSON.stringify(categories);
+		return categories;
 	}
 }

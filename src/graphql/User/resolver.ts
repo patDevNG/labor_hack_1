@@ -21,8 +21,9 @@ export class UserResolver {
 
 	@Mutation(() => User)
 	async createNewUser(@Arg('input') input: createUserInput): Promise<User> {
-		// await admin.auth().setCustomUserClaims(uid, { role });
-		const { role } = input;
+		const { role, uid } = input;
+		await admin.auth().setCustomUserClaims(uid, { role });
+
 		const createdUser = await UserModel.create({
 			...input,
 		});
@@ -33,12 +34,13 @@ export class UserResolver {
 				// add to tradesman collection
 				//remember to passing userId as _id
 			}
-			const user = await UserModel.findById(_id);
+			createdUser.id = _id;
+			// const user = await UserModel.findById(_id);
 
-			if (user) {
-				user.id = _id;
-				return user;
-			}
+			// if (user) {
+			// 	user.id = _id;
+			// 	return user;
+			// }
 			throw new Error('User not created');
 		}
 
